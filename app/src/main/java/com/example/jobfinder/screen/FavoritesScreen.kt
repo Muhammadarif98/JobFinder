@@ -22,6 +22,7 @@ import com.example.jobfinder.component.VacancyCard
 import com.example.jobfinder.ui.theme.JobFinderTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.example.domain.model.Salary
 import com.example.jobfinder.viewmodel.FavoritesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,7 +44,7 @@ fun FavoritesScreen(
                 )
             } else {
                 LazyColumn(modifier = Modifier.padding(8.dp)) {
-                    items(favoriteVacancies) { vacancy ->
+                    items(favoriteVacancies.filter { it.isFavorite }) { vacancy ->
                         VacancyCard(
                             vacancy = vacancy,
                             onCardClick = {
@@ -72,9 +73,16 @@ fun FavoritesScreenPreview() {
                 title = "UI/UX Designer",
                 company = "Мобирикс",
                 address = Address(town = "Минск"),
-                experience = Experience(previewText = "Опыт от 1 до 3 лет", text = ""),
+                experience = Experience(previewText = "Опыт от 1 до 3 лет", text = "1–3 года"),
                 publishedDate = "2024-02-20",
-                isFavorite = true
+                isFavorite = true,
+                lookingNumber = 5,
+                schedules = listOf("полная занятость", "удаленная работа"),
+                appliedNumber = 0,
+                salary =  Salary(short = "20 - 50" , full = "от 20 000 до 50 000 ₽ на руки"),
+                description = "null",
+                responsibilities = "null",
+                questions =  listOf("null")
             ),
             Vacancy(
                 id = "2",
@@ -83,7 +91,14 @@ fun FavoritesScreenPreview() {
                 address = Address(town = "Казань"),
                 experience = Experience(previewText = "Опыт от 3 до 6 лет", text = ""),
                 publishedDate = "2024-03-01",
-                isFavorite = true
+                isFavorite = true,
+                lookingNumber = 2,
+                schedules = listOf("полная занятость", "удаленная работа"),
+                appliedNumber = 0,
+                salary =  Salary(short = "20 - 50" , full = "от 20 000 до 50 000 ₽ на руки"),
+                description = "null",
+                responsibilities = "null",
+                questions =  listOf("null")
             )
         )
         FavoritesScreen(

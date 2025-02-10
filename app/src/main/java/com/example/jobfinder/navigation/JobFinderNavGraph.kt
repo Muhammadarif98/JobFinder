@@ -5,12 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.jobfinder.MainActivity
 import com.example.jobfinder.screen.FavoritesScreen
 import com.example.jobfinder.screen.HomeScreen
 import com.example.jobfinder.screen.VacancyDetailsScreen
+import com.example.jobfinder.ui.theme.JobFinderTheme
 import com.example.jobfinder.viewmodel.FavoritesViewModel
 import com.example.jobfinder.viewmodel.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -36,11 +39,20 @@ fun JobFinderNavGraph() {
 
             composable("vacancy/{id}") { backStackEntry ->
                 val id = backStackEntry.arguments?.getString("id")
-                VacancyDetailsScreen(
-                    navController = navController,
-                    vacancyId = id
-                )
+                if (id != null) {
+                    VacancyDetailsScreen(
+                        navController = navController,
+                        vacancyId = id
+                    )
+                }
             }
         }
+    }
+}
+@Preview(showSystemUi = true)
+@Composable
+fun JobPreview() {
+    JobFinderTheme {
+        JobFinderNavGraph()
     }
 }

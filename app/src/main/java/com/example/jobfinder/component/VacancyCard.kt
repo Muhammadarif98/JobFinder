@@ -3,8 +3,11 @@ package com.example.jobfinder.component
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -20,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.Address
 import com.example.domain.model.Experience
+import com.example.domain.model.Salary
 import com.example.domain.model.Vacancy
 import com.example.jobfinder.R
 import com.example.jobfinder.ui.theme.JobFinderTheme
@@ -36,67 +40,104 @@ fun VacancyCard(
             .padding(8.dp)
             .clickable { onCardClick() }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(text = vacancy.title, style = MaterialTheme.typography.titleMedium)
+        Column(Modifier.padding(16.dp)) {
 
-                    Text(
-                        text = vacancy.company,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = 10.dp)
-                    )
-
-                    Text(
-                        text = vacancy.address.town,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = 6.dp)
-                    )
-
-                    Text(
-                        text = vacancy.experience.previewText,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-
-                    Text(
-                        text = "Опубликовано ${vacancy.publishedDate}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-
-
+            vacancy.lookingNumber?.let { looking ->
+                val text = when {
+                    looking % 10 == 1 && looking % 100 != 11 -> "Сейчас просматривает $looking человек"
+                    looking % 10 in 2..4 && looking % 100 !in 12..14 -> "Сейчас просматривает $looking человека"
+                    else -> "Сейчас просматривает $looking людей"
                 }
-
-
-                IconButton(onClick = onFavoriteClick) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_favorite),
-                        contentDescription = "Избранное"
+                Row {
+                    Text(
+                        modifier = Modifier.weight(1f) ,
+                        text = text,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF4CB24E),
                     )
-                }// Padding для красоты
+                    Spacer(modifier = Modifier.size(8.dp))
+
+                    IconButton(onClick = { onFavoriteClick() }) {
+                        Icon(
+                            painter =
+                            if (vacancy.isFavorite) painterResource(id = R.drawable.ic_favorite_blue)
+                            else painterResource(id = R.drawable.ic_favorite),
+                            contentDescription = "Избранное"
+                        )
+                    }
+                }
 
             }
 
-        }
-        Button(
-            onClick = { println("Кнопка нажата") },
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CB24E))
-        ) {
-            Text(text = "Откликнуться", color = Color.White)
+            Text(
+                text = vacancy.title,
+                style = MaterialTheme.typography.titleMedium
+            )
+            vacancy.salary.short?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            Text(
+                text = "${vacancy.company}, ${vacancy.address.town}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            )
+
+            Text(
+                text = vacancy.experience.previewText,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+
+            Text(
+                text = "Опубликовано ${vacancy.publishedDate}",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+
+            Row(
+                modifier =
+                Modifier.fillMaxWidth()
+            ) {
+
+                Column(
+                    modifier =
+                    Modifier.weight(1f)
+                ) {
+                    Spacer(
+                        modifier =
+                        Modifier.height(24.dp)
+                    )
+                }
+
+
+            }
+
+            Button(
+                onClick = { println("Кнопка нажата") },
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors =
+                ButtonDefaults.buttonColors(
+                    containerColor =
+                    Color(0xFF4CB24E)
+                )
+            ) {
+
+                Text(
+                    text = "Откликнуться", color =
+                    Color.White
+                )
+
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -104,22 +145,22 @@ fun VacancyCardPreview() {
     JobFinderTheme {
         VacancyCard(
             vacancy = Vacancy(
-                id = "cbf0c984-7c6c-4ada-82da-e29dc698bb50",
-                title = "UI/UX дизайнер",
-                address = Address(
-                    town = "Минск",
-                    street = "улица Бирюзова",
-                    house = "4/5"
-                ),
+                id = "1",
+                title = "UI/UX Designer",
                 company = "Мобирикс",
-                experience = Experience(
-                    previewText = "Опыт от 1 до 3 лет",
-                    text = "1–3 года"
-                ),
+                address = Address(town = "Минск"),
+                experience = Experience(previewText = "Опыт от 1 до 3 лет", text = "1–3 года"),
                 publishedDate = "2024-02-20",
-                isFavorite = false,
+                isFavorite = true,
+                lookingNumber = 5,
+                schedules = listOf("полная занятость", "удаленная работа"),
+                appliedNumber = 0,
+                salary =  Salary(short = "20 - 50" , full = "от 20 000 до 50 000 ₽ на руки"),
+                description = "description",
+                responsibilities = "responsibilities",
+                questions =  listOf("questions,questions")
             ),
-            onCardClick = { /*TODO*/ },
+            onCardClick = {},
             onFavoriteClick = {}
         )
     }

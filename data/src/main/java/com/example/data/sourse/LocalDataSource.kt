@@ -16,7 +16,10 @@ class LocalDataSource(private val context: Context) {
             .use { it.readText() }
         return Gson().fromJson(jsonString, ApiResponse::class.java)
     }
-
+    fun getVacancyById(id: String): Vacancy? {
+        val apiResponse = getData()
+        return apiResponse?.vacancies?.find { it.id == id }
+    }
     suspend fun getFavorites(): List<Vacancy> {
         // Реализация получения списка избранных вакансий из локального хранилища.
         // Для примера:

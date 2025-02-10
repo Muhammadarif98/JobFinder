@@ -14,13 +14,33 @@ class FavoritesViewModel : ViewModel() {
 
     fun addToFavorites(vacancy: Vacancy) {
         viewModelScope.launch {
-            _favoriteVacancies.value += vacancy
+            val updatedVacancy = vacancy.copy(isFavorite = true)
+            _favoriteVacancies.value += updatedVacancy
         }
     }
 
-    fun removeFromFavorites(vacancy: Vacancy) {
+    fun updateVacancyState(vacancyId: String, isFavorite: Boolean) {
         viewModelScope.launch {
-            _favoriteVacancies.value -= vacancy
+            val updatedList = _favoriteVacancies.value.map { vacancy ->
+                if (vacancy.id == vacancyId) {
+                    vacancy.copy(isFavorite = isFavorite)
+                } else {
+                    vacancy
+                }
+            }
+            _favoriteVacancies.value = updatedList
         }
     }
+    fun removeFromFavorites(vacancy: Vacancy) {
+        viewModelScope.launch {
+            val updatedList = _favoriteVacancies.value.filter { it.id != vacancy.id }
+            val finalList = updatedList.map { v ->
+                if (v.id == vacancy.id && v in _favoriteVacancies.value) {
+                    v.copy(isFavorite = false)
+                } else v
+            }
+            _favoriteVacancies.value = finalList
+        }
+    }
+
 }
