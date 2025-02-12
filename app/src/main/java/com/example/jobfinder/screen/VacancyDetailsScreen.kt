@@ -20,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +35,7 @@ import com.example.domain.model.Vacancy
 import com.example.jobfinder.component.BottomMenu
 import com.example.jobfinder.component.CompanyAddressWithMap
 import com.example.jobfinder.ui.theme.JobFinderTheme
+import com.example.jobfinder.viewmodel.FavoritesViewModel
 import com.example.jobfinder.viewmodel.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -41,9 +44,19 @@ import org.koin.androidx.compose.koinViewModel
 fun VacancyDetailsScreen(
     navController: NavController,
     vacancyId: String,
+    viewModel: FavoritesViewModel = koinViewModel()
 ) {
+    // Получаем список избранных вакансий
+    val favoriteVacancies by viewModel.favoriteVacancies.collectAsState()
+
+    // Количество избранных вакансий
+    val favoriteCount = favoriteVacancies.size
     Scaffold(
-        bottomBar = { BottomMenu(navController) }
+        bottomBar = {
+            BottomMenu(
+                navController = navController,
+                favoriteCount = favoriteCount // Передаем количество избранных
+            )}
     ) { paddingValues ->
         val viewModel = koinViewModel<HomeViewModel>()
         val vacancy by viewModel.getVacancyById(vacancyId).collectAsState(initial = null)

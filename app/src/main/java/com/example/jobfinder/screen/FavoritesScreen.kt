@@ -22,6 +22,8 @@ import com.example.jobfinder.component.VacancyCard
 import com.example.jobfinder.ui.theme.JobFinderTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.example.domain.model.Salary
 import com.example.jobfinder.viewmodel.FavoritesViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -31,28 +33,33 @@ fun FavoritesScreen(
     navController: NavController,
     viewModel: FavoritesViewModel = koinViewModel()
 ) {
+
+    // Получаем список избранных вакансий
     val favoriteVacancies by viewModel.favoriteVacancies.collectAsState()
 
+    // Количество избранных вакансий
+    val favoriteCount = favoriteVacancies.size
+
     Scaffold(
-        bottomBar = { BottomMenu(navController) }
+        bottomBar = {
+            BottomMenu(
+            navController = navController,
+            favoriteCount = favoriteCount // Передаем количество избранных
+        )}
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             if (favoriteVacancies.isEmpty()) {
                 Text(
                     text = "У вас пока нет избранных вакансий",
-                    modifier = Modifier.padding(16.dp)
-                )
+                    modifier = Modifier.padding(16.dp))
             } else {
                 LazyColumn(modifier = Modifier.padding(8.dp)) {
-                    items(favoriteVacancies.filter { it.isFavorite }) { vacancy ->
+                    items(favoriteVacancies) { vacancy ->
                         VacancyCard(
                             vacancy = vacancy,
-                            onCardClick = {
-                                navController.navigate("vacancy/${vacancy.id}")
-                            },
-                            onFavoriteClick = {
-                                viewModel.removeFromFavorites(vacancy)
-                            }
+                            onCardClick = { navController.navigate("vacancy/${vacancy.id}") },
+                            viewModel = viewModel,
+                            isRemovalOnly = true
                         )
                     }
                 }

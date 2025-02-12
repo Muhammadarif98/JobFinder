@@ -16,6 +16,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,13 +30,17 @@ import com.example.domain.model.Salary
 import com.example.domain.model.Vacancy
 import com.example.jobfinder.R
 import com.example.jobfinder.ui.theme.JobFinderTheme
+import com.example.jobfinder.viewmodel.FavoritesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun VacancyCard(
     vacancy: Vacancy,
     onCardClick: () -> Unit,
-    onFavoriteClick: () -> Unit
+    viewModel: FavoritesViewModel = koinViewModel(),
+    isRemovalOnly: Boolean = false
 ) {
+    val isFavorite by remember { mutableStateOf(viewModel.isFavorite(vacancy.id)) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,12 +64,24 @@ fun VacancyCard(
                     )
                     Spacer(modifier = Modifier.size(8.dp))
 
-                    IconButton(onClick = { onFavoriteClick() }) {
+                    IconButton(onClick = {
+                        if (isRemovalOnly) {
+                            // Только удаление (для FavoritesScreen)
+                            viewModel.removeFromFavorites(vacancy)
+                        } else {
+                            // Добавление или удаление (для HomeScreen)
+                            if (isFavorite) {
+                                viewModel.removeFromFavorites(vacancy)
+                            } else {
+                                viewModel.addToFavorites(vacancy)
+                            }
+                        }
+                    }) {
                         Icon(
-                            painter =
-                            if (vacancy.isFavorite) painterResource(id = R.drawable.ic_favorite_blue)
+                            painter = if (isFavorite) painterResource(id = R.drawable.ic_favorite_blue)
                             else painterResource(id = R.drawable.ic_favorite),
-                            contentDescription = "Избранное"
+                            contentDescription = "Избранное",
+                            tint = Color.Unspecified
                         )
                     }
                 }
@@ -161,7 +180,7 @@ fun VacancyCardPreview() {
                 questions =  listOf("questions,questions")
             ),
             onCardClick = {},
-            onFavoriteClick = {}
+
         )
     }
 }

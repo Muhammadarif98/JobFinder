@@ -24,7 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.jobfinder.component.BottomMenu
+import com.example.jobfinder.component.CountVacancies
 import com.example.jobfinder.component.OfferCard
+import com.example.jobfinder.component.TopBar
 import com.example.jobfinder.component.VacancyCard
 import com.example.jobfinder.viewmodel.FavoritesViewModel
 import com.example.jobfinder.viewmodel.HomeViewModel
@@ -38,12 +40,31 @@ fun HomeScreen(
 ) {
     val data by viewModel.data.collectAsState()
     var showAllVacancies by remember { mutableStateOf(false) }
+    // Получаем список избранных вакансий
+    val favoriteVacancies by favoriteViewModel.favoriteVacancies.collectAsState()
 
+    // Количество избранных вакансий
+    val favoriteCount = favoriteVacancies.size
     Scaffold(
-        bottomBar = { BottomMenu(navController) }
+        topBar = {
+            TopBar(
+                showBackButton = showAllVacancies,
+                onBackClick = { showAllVacancies = false },
+                showVacanciesText = showAllVacancies
+            )
+        },
+        bottomBar = {
+            BottomMenu(
+                navController = navController,
+                favoriteCount = favoriteCount
+            )}
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             data?.let { apiResponse ->
+                CountVacancies(
+                    showBackButton = showAllVacancies,
+                    vacanciesCount = data?.vacancies?.size ?: 0,
+                )
                 // Отображение рекомендаций
                 LazyRow {
                     items(apiResponse.offers) { offer ->
@@ -61,18 +82,11 @@ fun HomeScreen(
                 LazyColumn {
                     items(vacancies) { vacancy ->
                         VacancyCard(
-                            vacancy = vacancy,
+                            vacancy = vacancy.copy(isFavorite = favoriteViewModel.isFavorite(vacancy.id)),
                             onCardClick = { navController.navigate("vacancy/${vacancy.id}") },
-                            onFavoriteClick = {
-                                if (vacancy.isFavorite) {
-                                    favoriteViewModel.removeFromFavorites(vacancy)
-                                    favoriteViewModel.updateVacancyState(vacancy.id, false)
-                                } else {
-                                    favoriteViewModel.addToFavorites(vacancy)
-                                    favoriteViewModel.updateVacancyState(vacancy.id, true)
-
-                                }
-                            })
+                            viewModel = favoriteViewModel,
+                            isRemovalOnly = false
+                        )
                     }
 
 
