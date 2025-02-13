@@ -1,18 +1,22 @@
 package com.example.jobfinder.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -67,18 +71,17 @@ fun TopBar(
         )
 
 
-        IconButton(
-            onClick = {/*Обработка клика на фильтр*/ },
-            colors = IconButtonColors(
-                containerColor = Color.Gray,
-                contentColor = Color.White,
-                disabledContainerColor = Color.Gray,
-                disabledContentColor = Color.Gray
-            )
+        Box(
+            modifier = Modifier
+                .size(56.dp) // Задаем размер кнопки
+                .background(Color.Gray, RoundedCornerShape(8.dp)) // Закругляем углы
+                .clickable { /* Обработка клика на фильтр */ },
+            contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_filter),//Замените на вашу иконку
-                contentDescription = "Фильтр"
+                painter = painterResource(id = R.drawable.ic_filter), // Замените на вашу иконку
+                contentDescription = "Фильтр",
+                tint = Color.White
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.example.jobfinder.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,8 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -166,15 +165,24 @@ fun VacancyDetailsScreen(
                     Text(
                         text = "Задайте вопрос работодателю",
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        color = Color.White // Белый цвет текста
                     )
                     it.questions.forEach { question ->
                         question?.let {
-                            Text(
-                                text = "- $it",
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(bottom = 4.dp)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .fillMaxWidth()
+                                    .background(Color.LightGray.copy(alpha = 0.2f), RoundedCornerShape(50.dp)) // Серый фон с закругленными углами
+                                    .padding(10.dp) // Отступы внутри бокса
+                            ) {
+                                Text(
+                                    text = "- $it",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.White // Белый цвет текста
+                                )
+                            }
                         }
                     }
                 }

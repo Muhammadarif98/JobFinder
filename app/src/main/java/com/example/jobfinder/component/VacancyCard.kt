@@ -99,9 +99,15 @@ fun VacancyCard(
                 )
             }
 
+            Text(
+                text = vacancy.address.town,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            )
+
             Row(verticalAlignment = CenterVertically) {
                 Text(
-                    text = vacancy.address.town,
+                    text = vacancy.company,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 )
@@ -113,12 +119,6 @@ fun VacancyCard(
                 )
             }
 
-
-            Text(
-                text = vacancy.company,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-            )
 
             Row(verticalAlignment = CenterVertically) {
                 Icon(
