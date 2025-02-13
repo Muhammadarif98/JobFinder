@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -55,9 +56,9 @@ fun VacancyCard(
                     looking % 10 in 2..4 && looking % 100 !in 12..14 -> "Сейчас просматривает $looking человека"
                     else -> "Сейчас просматривает $looking людей"
                 }
-                Row {
+                Row(verticalAlignment = CenterVertically) {
                     Text(
-                        modifier = Modifier.weight(1f) ,
+                        modifier = Modifier.weight(1f),
                         text = text,
                         style = MaterialTheme.typography.bodySmall,
                         color = Color(0xFF4CB24E),
@@ -85,12 +86,11 @@ fun VacancyCard(
                         )
                     }
                 }
-
             }
 
             Text(
                 text = vacancy.title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleLarge
             )
             vacancy.salary.short?.let {
                 Text(
@@ -99,21 +99,45 @@ fun VacancyCard(
                 )
             }
 
+            Row(verticalAlignment = CenterVertically) {
+                Text(
+                    text = vacancy.address.town,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_hardcod),
+                    contentDescription = "Избранное",
+                    tint = Color.Unspecified
+                )
+            }
+
+
             Text(
-                text = "${vacancy.company}, ${vacancy.address.town}",
-                style = MaterialTheme.typography.labelSmall,
+                text = vacancy.company,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             )
 
-            Text(
-                text = vacancy.experience.previewText,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
+            Row(verticalAlignment = CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_exp),
+                    contentDescription = "Избранное",
+                    tint = Color.Unspecified
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                Text(
+                    text = vacancy.experience.previewText,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+
 
             Text(
                 text = "Опубликовано ${vacancy.publishedDate}",
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
 
@@ -140,7 +164,7 @@ fun VacancyCard(
                 modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(4.dp),
                 colors =
                 ButtonDefaults.buttonColors(
                     containerColor =
@@ -174,13 +198,13 @@ fun VacancyCardPreview() {
                 lookingNumber = 5,
                 schedules = listOf("полная занятость", "удаленная работа"),
                 appliedNumber = 0,
-                salary =  Salary(short = "20 - 50" , full = "от 20 000 до 50 000 ₽ на руки"),
+                salary = Salary(short = "20 - 50", full = "от 20 000 до 50 000 ₽ на руки"),
                 description = "description",
                 responsibilities = "responsibilities",
-                questions =  listOf("questions,questions")
+                questions = listOf("questions,questions")
             ),
             onCardClick = {},
 
-        )
+            )
     }
 }

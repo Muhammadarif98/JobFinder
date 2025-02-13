@@ -1,8 +1,6 @@
 package com.example.jobfinder.screen
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,22 +8,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.domain.model.Address
 import com.example.domain.model.Experience
+import com.example.domain.model.Salary
 import com.example.domain.model.Vacancy
 import com.example.jobfinder.component.BottomMenu
 import com.example.jobfinder.component.VacancyCard
 import com.example.jobfinder.ui.theme.JobFinderTheme
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import com.example.domain.model.Salary
 import com.example.jobfinder.viewmodel.FavoritesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -46,17 +44,37 @@ fun FavoritesScreen(
     Scaffold(
         bottomBar = {
             BottomMenu(
-            navController = navController,
-            favoriteCount = favoriteCount // Передаем количество избранных
-        )}
+                navController = navController,
+                favoriteCount = favoriteCount // Передаем количество избранных
+            )
+        }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             if (favoriteVacancies.isEmpty()) {
                 Text(
                     text = "У вас пока нет избранных вакансий",
-                    modifier = Modifier.padding(16.dp))
+                    modifier = Modifier.padding(16.dp)
+                )
             } else {
                 LazyColumn(modifier = Modifier.padding(8.dp)) {
+                    item {
+                        Text(
+                            "Избранное", fontSize = 20.sp,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                    item {
+                        val favoriteCountText = when (favoriteCount) {
+                            in 0..1 -> "$favoriteCount вакансия"
+                            in 2..100 -> "$favoriteCount вакансии"
+                            else -> "Нет вакансии"
+                        }
+                        Text(
+                            favoriteCountText, fontSize = 14.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                        )
+                    }
                     items(favoriteVacancies) { vacancy ->
                         VacancyCard(
                             vacancy = vacancy,
@@ -89,10 +107,10 @@ fun FavoritesScreenPreview() {
                 lookingNumber = 5,
                 schedules = listOf("полная занятость", "удаленная работа"),
                 appliedNumber = 0,
-                salary =  Salary(short = "20 - 50" , full = "от 20 000 до 50 000 ₽ на руки"),
+                salary = Salary(short = "20 - 50", full = "от 20 000 до 50 000 ₽ на руки"),
                 description = "null",
                 responsibilities = "null",
-                questions =  listOf("null")
+                questions = listOf("null")
             ),
             Vacancy(
                 id = "2",
@@ -105,10 +123,10 @@ fun FavoritesScreenPreview() {
                 lookingNumber = 2,
                 schedules = listOf("полная занятость", "удаленная работа"),
                 appliedNumber = 0,
-                salary =  Salary(short = "20 - 50" , full = "от 20 000 до 50 000 ₽ на руки"),
+                salary = Salary(short = "20 - 50", full = "от 20 000 до 50 000 ₽ на руки"),
                 description = "null",
                 responsibilities = "null",
-                questions =  listOf("null")
+                questions = listOf("null")
             )
         )
         FavoritesScreen(

@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,8 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfinder.component.BottomMenu
 import com.example.jobfinder.component.CountVacancies
@@ -46,6 +44,7 @@ fun HomeScreen(
     // Количество избранных вакансий
     val favoriteCount = favoriteVacancies.size
     Scaffold(
+
         topBar = {
             TopBar(
                 showBackButton = showAllVacancies,
@@ -57,7 +56,8 @@ fun HomeScreen(
             BottomMenu(
                 navController = navController,
                 favoriteCount = favoriteCount
-            )}
+            )
+        }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             data?.let { apiResponse ->
@@ -66,7 +66,7 @@ fun HomeScreen(
                     vacanciesCount = data?.vacancies?.size ?: 0,
                 )
                 // Отображение рекомендаций
-                LazyRow {
+                LazyRow (modifier = Modifier.padding(8.dp),){
                     items(apiResponse.offers) { offer ->
                         OfferCard(offer = offer)
                     }
@@ -79,7 +79,14 @@ fun HomeScreen(
                     apiResponse.vacancies.take(3)
                 }
 
-                LazyColumn {
+                LazyColumn(modifier = Modifier.padding(8.dp),) {
+                    item {
+                        Text(
+                            "Вакансии для вас",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                     items(vacancies) { vacancy ->
                         VacancyCard(
                             vacancy = vacancy.copy(isFavorite = favoriteViewModel.isFavorite(vacancy.id)),
