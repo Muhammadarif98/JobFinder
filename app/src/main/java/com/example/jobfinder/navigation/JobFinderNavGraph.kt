@@ -51,7 +51,7 @@ fun JobFinderNavGraph() {
                     VacancyDetailsScreen(
                         navController = navController,
                         vacancyId = id,
-                        viewModel = favoriteViewModel
+                        favoriteViewModel = favoriteViewModel
                     )
                 }
             }

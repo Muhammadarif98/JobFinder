@@ -24,7 +24,10 @@ import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(navController: NavController,viewModel: FavoritesViewModel = koinViewModel()) {
+fun ProfileScreen(
+    navController: NavController,
+    viewModel: FavoritesViewModel = koinViewModel()
+) {
     // Получаем список избранных вакансий
     val favoriteVacancies by viewModel.favoriteVacancies.collectAsState()
 

@@ -8,26 +8,31 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.jobfinder.R
 
-
 @Composable
 fun BottomMenu(navController: NavController, favoriteCount: Int) {
-    // Состояние выбранного пункта меню
-    var selectedItem by remember { mutableStateOf("home") }
+    // Получаем текущий маршрут навигации
+    val currentRoute = navController.currentBackStackEntry?.destination?.route
+
+    // Определяем выбранный пункт меню на основе текущего маршрута
+    val selectedItem = when (currentRoute) {
+        "home" -> "home"
+        "favorites" -> "favorites"
+        "responses" -> "responses"
+        "messages" -> "messages"
+        "profile" -> "profile"
+        else -> "home" // По умолчанию
+    }
 
     NavigationBar(
         modifier = Modifier.fillMaxWidth()
@@ -47,9 +52,19 @@ fun BottomMenu(navController: NavController, favoriteCount: Int) {
                 label = { Text("Поиск", fontSize = 10.sp) },
                 selected = selectedItem == "home",
                 onClick = {
-                    selectedItem = "home"
-                    navController.navigate("home")
-                }
+                    navController.navigate("home") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.Unspecified, // Цвет иконки выбранного элемента
+                    selectedTextColor = Color.Unspecified, // Цвет текста выбранного элемента
+                    indicatorColor = Color.Transparent // Убираем серый круг
+                )
             )
 
             // Избранное
@@ -76,9 +91,19 @@ fun BottomMenu(navController: NavController, favoriteCount: Int) {
                 label = { Text("Избранное", fontSize = 10.sp) },
                 selected = selectedItem == "favorites",
                 onClick = {
-                    selectedItem = "favorites"
-                    navController.navigate("favorites")
-                }
+                    navController.navigate("favorites") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.Unspecified,
+                    selectedTextColor = Color.Unspecified,
+                    indicatorColor = Color.Transparent // Убираем серый круг
+                )
             )
 
             // Отклики
@@ -95,9 +120,19 @@ fun BottomMenu(navController: NavController, favoriteCount: Int) {
                 label = { Text("Отклики", fontSize = 10.sp) },
                 selected = selectedItem == "responses",
                 onClick = {
-                    selectedItem = "responses"
-                    navController.navigate("responses")
-                }
+                    navController.navigate("responses") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.Unspecified,
+                    selectedTextColor = Color.Unspecified,
+                    indicatorColor = Color.Transparent // Убираем серый круг
+                )
             )
 
             // Сообщения
@@ -114,9 +149,19 @@ fun BottomMenu(navController: NavController, favoriteCount: Int) {
                 label = { Text("Сообщения", fontSize = 10.sp) },
                 selected = selectedItem == "messages",
                 onClick = {
-                    selectedItem = "messages"
-                    navController.navigate("messages")
-                }
+                    navController.navigate("messages") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.Unspecified,
+                    selectedTextColor = Color.Unspecified,
+                    indicatorColor = Color.Transparent // Убираем серый круг
+                )
             )
 
             // Профиль
@@ -133,9 +178,19 @@ fun BottomMenu(navController: NavController, favoriteCount: Int) {
                 label = { Text("Профиль", fontSize = 10.sp) },
                 selected = selectedItem == "profile",
                 onClick = {
-                    selectedItem = "profile"
-                    navController.navigate("profile")
-                }
+                    navController.navigate("profile") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.Unspecified,
+                    selectedTextColor = Color.Unspecified,
+                    indicatorColor = Color.Transparent // Убираем серый круг
+                )
             )
         }
     }

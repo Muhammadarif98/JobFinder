@@ -11,5 +11,5 @@ import org.koin.dsl.module
 val appModule = module {
     single { LocalDataSource(androidContext()) }
     viewModel { HomeViewModel(get()) } // Koin автоматически внедряет LocalDataSource
-    viewModel { FavoritesViewModel(androidContext()) }
+    single { FavoritesViewModel(androidContext()) } // Синглтон
 }

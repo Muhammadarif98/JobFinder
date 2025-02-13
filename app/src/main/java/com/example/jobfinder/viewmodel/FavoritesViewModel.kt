@@ -22,7 +22,7 @@ class FavoritesViewModel(context: Context) : ViewModel() {
     }
 
     // Загрузка избранных вакансий из SharedPreferences
-    private fun loadFavorites() {
+    fun loadFavorites() {
         viewModelScope.launch {
             val favorites = sharedPreferences.all.mapNotNull { (key, value) ->
                 if (value == true) {

@@ -44,10 +44,10 @@ import org.koin.androidx.compose.koinViewModel
 fun VacancyDetailsScreen(
     navController: NavController,
     vacancyId: String,
-    viewModel: FavoritesViewModel = koinViewModel()
+    favoriteViewModel: FavoritesViewModel = koinViewModel()
 ) {
     // Получаем список избранных вакансий
-    val favoriteVacancies by viewModel.favoriteVacancies.collectAsState()
+    val favoriteVacancies by favoriteViewModel.favoriteVacancies.collectAsState()
 
     // Количество избранных вакансий
     val favoriteCount = favoriteVacancies.size
